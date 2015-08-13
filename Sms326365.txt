@@ -1,0 +1,25 @@
+Para facilitar o desenvolvimento e manutenção dos modelos de e-mail (principalmente no caso de um modelo de e-mail que será inativado), criamos as tabelas SIS_TIPOEMAIL e SIS_TIPOEMAIL_TAG
+
+Módulo Adm
++ Tabelas de Sistema
+   + Tipos de E-mail
+       + Ativos
+         - Tipo de E-mail (SIS_TIPOEMAIL)
+            + Tags
+               - Tag 1 (SIS_TIPOEMAIL_TAG)
+               - Tag 2
+               - ...			   
+	   + Inativos
+	   
+Com essa alteração, a equipe de desenvolvimento deixará de incluir os modelos de e-mail e suas tags na DLL SFNUTILITARIOS (interface "Cadastrar e-mail" e "Pesquisa de Modelo de E-mail"), bastando apenas :
+1. Inserir um registro na tabela SIS_TIPOEMAIL (utilizando o mesmo processo que utilizamos para criar um registro na SIS_TIPOPROCESSO, reservando um código e geração script para esse insert), e 
+2. criar uma atualização para inserir as tags na tabela SIS_TIPOEMAIL_TAG (um registro para cada tag):
+
+Como as interfaces de cadastro e pesquisa de e-mail agora buscam os modelos e suas tags direto do banco, não será mais necessário alterar a DLL, facilitando a sua manutenção, principalmente nos casos que a Cassi peça para removermos um modelo de e-mail, já que só basta dar um update no campo INATIVO do modelo de e-mail para que ele não seja mais exibido no campo "Tipo de E-mail" das interfaces supracitadas.
+
+Roteiro de teste:
+
+1. Garanta que os script gerados para essa SMS tenha sido aplicados na base de teste antes de rodar a atualização 1926. (Basicamente verifique se existem registros no caminho informado acima).
+2. Execute a atualização 1926.
+3. Após a execução da atualização, verifique se os tags foram cadastrados abaixo dos modelos de e-mail (lembrando que nem todos os modelos possuem tags).
+4. Entre na tela de cadastros de modelo de e-mail e faça os testes para procurar os modelos, inserir tags, salvar, editar, excluir e pesquisar os modelos. A tela deverá funcionar normalmente, já que para o usuário esse processo não mudou nada.
